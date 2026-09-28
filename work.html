@@ -1,0 +1,21 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Prompt Archive</title><link rel="stylesheet" href="common.css"></head>
+<body><div class="wrap"><header class="top"><h1 id="title">불러오는 중</h1><a class="back" href="index.html">← 목록</a></header><div class="meta" id="meta"></div>
+<div class="section"><h2>세부 프롬프트</h2><div class="steps" id="steps"></div><div class="panel hidden" id="panel"></div></div>
+<div class="section"><h2>최종</h2><div class="panel" id="final"></div></div>
+<p class="note">이미지 저장: 아이폰은 '사진'이 아니라 '파일' 앱의 다운로드 폴더에 저장됩니다.</p></div>
+<script src="common.js"></script><script>
+function imgBlock(src,big){return '<div class="imgbox'+(big?' big':'')+'"><img loading="lazy" src="'+esc(src)+'" alt=""><a class="btn" href="'+esc(src)+'" download="'+esc(fname(src))+'">이미지 저장</a></div>';}
+function body(o){o=o||{};let h='<div class="meta">'+[['사용 AI',o.ai],['날짜',o.date]].filter(x=>x[1]).map(x=>'<span><b>'+x[0]+'</b>'+esc(x[1])+'</span>').join('')+'</div>';
+const rs=(o.result_images||[]).filter(Boolean);h+='<div class="label">결과 이미지</div>'+(rs.length?'<div class="imgs">'+rs.map(x=>imgBlock(x,true)).join('')+'</div>':'<div class="empty">결과 이미지 없음</div>');
+const ins=(o.input_images||[]).filter(Boolean);h+='<div class="label">입력 이미지</div>'+(ins.length?'<div class="imgs">'+ins.map(s=>imgBlock(s)).join('')+'</div>':'<div class="empty">입력 이미지 없음</div>');
+h+='<div class="label">프롬프트</div>'+(o.prompt?'<pre class="prompt"></pre><button class="btn copy">프롬프트 복사</button>':'<div class="empty">프롬프트 없음</div>');return h;}
+function fill(el,o){el.innerHTML=body(o);const p=el.querySelector('pre.prompt');if(p)p.textContent=o.prompt;const b=el.querySelector('.copy');if(b)b.onclick=()=>copyText(o.prompt,b);}
+loadWorks().then(ws=>{const id=new URLSearchParams(location.search).get('id');const w=ws.find(x=>String(x.id)===id)||ws[Number(id)];if(!w){document.getElementById('title').textContent='결과물을 찾을 수 없습니다';return;}
+document.title=(w.title||w.id)+' · Prompt Archive';document.getElementById('title').textContent=w.title||w.id;
+document.getElementById('meta').innerHTML=[['분류',w.category],['날짜',w.date],['출처',w.source]].filter(x=>x[1]).map(x=>'<span><b>'+x[0]+'</b>'+esc(x[1])+'</span>').join('');
+const steps=w.steps||[],sEl=document.getElementById('steps'),panel=document.getElementById('panel');
+if(!steps.length)sEl.innerHTML='<div class="empty">세부 프롬프트 없음</div>';
+steps.forEach((s,i)=>{const b=document.createElement('button');b.className='step-btn';b.innerHTML='<span class="no">'+String(i+1).padStart(2,'0')+'</span><span class="t">'+esc(s.title||'')+'</span>';
+b.onclick=()=>{const on=b.classList.contains('on');sEl.querySelectorAll('.step-btn').forEach(x=>x.classList.remove('on'));if(on){panel.classList.add('hidden');return;}b.classList.add('on');panel.classList.remove('hidden');fill(panel,s);panel.insertAdjacentHTML('afterbegin','<div class="label" style="margin-top:0">'+String(i+1).padStart(2,'0')+(s.title?' · '+esc(s.title):'')+'</div>');};sEl.appendChild(b);});
+const f=w.final||{};const fe=document.getElementById('final');if(f.prompt||(f.result_images||[]).length||(f.input_images||[]).length)fill(fe,f);else fe.innerHTML='<div class="empty">등록된 최종 결과물 없음</div>';});
+</script></body></html>

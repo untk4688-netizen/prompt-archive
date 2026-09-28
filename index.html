@@ -1,0 +1,7 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Prompt Archive</title><link rel="stylesheet" href="common.css"></head>
+<body><div class="wrap"><header class="top"><h1>Prompt Archive</h1><span class="muted" id="count"></span></header><div class="grid" id="list"></div></div>
+<script src="common.js"></script><script>
+loadWorks().then(ws=>{document.getElementById('count').textContent=ws.length+'개 결과물';
+document.getElementById('list').innerHTML=ws.map((w,i)=>{const t=thumbOf(w);const id=encodeURIComponent(w.id||String(i));
+return '<a class="card" href="work.html?id='+id+'"><div class="thumb">'+(t?'<img loading="lazy" src="'+esc(t)+'" alt="">':esc(w.id||''))+'</div><div class="info"><b>'+esc(w.title||w.id||'제목 없음')+'</b><span class="muted">'+esc([w.category,w.date].filter(Boolean).join(' · '))+' · 세부 '+((w.steps||[]).length)+'개</span></div></a>';}).join('')||'<p class="muted">등록된 결과물이 없습니다.</p>';}).catch(()=>{document.getElementById('list').innerHTML='<p class="muted">목록을 불러오지 못했습니다.</p>';});
+</script></body></html>

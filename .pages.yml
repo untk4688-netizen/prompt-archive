@@ -1,0 +1,41 @@
+media:
+  input: media
+  output: media
+content:
+  - name: works
+    label: 결과물 관리
+    type: file
+    path: works.json
+    format: json
+    fields:
+      - name: works
+        label: 결과물
+        type: object
+        list: true
+        fields:
+          - { name: id, label: 코드 (주소에 쓰임 / 겹치지 않게), type: string }
+          - { name: title, label: 제목, type: string }
+          - { name: category, label: 분류, type: string }
+          - { name: date, label: 날짜, type: string }
+          - { name: source, label: 출처, type: string }
+          - { name: thumbnail, label: 대표 이미지 (비우면 최종 결과 이미지 사용), type: image }
+          - name: steps
+            label: 세부 프롬프트 (1~n)
+            type: object
+            list: true
+            fields:
+              - { name: title, label: 단계 제목, type: string }
+              - { name: ai, label: 사용 AI, type: string }
+              - { name: date, label: 날짜, type: string }
+              - { name: result_images, label: 결과 이미지, type: image, list: true }
+              - { name: input_images, label: 입력 이미지, type: image, list: true }
+              - { name: prompt, label: 프롬프트 원문, type: text }
+          - name: final
+            label: 최종
+            type: object
+            fields:
+              - { name: ai, label: 사용 AI, type: string }
+              - { name: date, label: 날짜, type: string }
+              - { name: result_images, label: 최종 결과 이미지, type: image, list: true }
+              - { name: input_images, label: 입력 이미지, type: image, list: true }
+              - { name: prompt, label: 최종 프롬프트 원문, type: text }

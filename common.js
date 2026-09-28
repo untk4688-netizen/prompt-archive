@@ -1,0 +1,5 @@
+async function loadWorks(){const r=await fetch('works.json?t='+Date.now(),{cache:'no-store'});const d=await r.json();return(d&&d.works)||[];}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function fname(src){try{return decodeURIComponent(String(src).split('/').pop().split('?')[0])||'image.png';}catch(e){return'image.png';}}
+function thumbOf(w){if(w.thumbnail)return w.thumbnail;const f=(w.final&&w.final.result_images||[]).filter(Boolean);if(f.length)return f[0];const s=(w.steps||[]).map(x=>(x&&x.result_images||[]).filter(Boolean)).filter(a=>a.length);return s.length?s[s.length-1][0]:'';}
+async function copyText(t,btn){try{await navigator.clipboard.writeText(t);}catch(e){const ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();}if(btn){const o=btn.textContent;btn.textContent='복사됨';setTimeout(()=>btn.textContent=o,1400);}}
