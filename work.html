@@ -6,8 +6,8 @@
 <script src="common.js"></script><script>
 function imgBlock(src,big){return '<div class="imgbox'+(big?' big':'')+'"><img loading="lazy" src="'+esc(src)+'" alt=""><a class="btn" href="'+esc(src)+'" download="'+esc(fname(src))+'">이미지 저장</a></div>';}
 function body(o){o=o||{};let h='<div class="meta">'+[['사용 AI',o.ai],['날짜',o.date]].filter(x=>x[1]).map(x=>'<span><b>'+x[0]+'</b>'+esc(x[1])+'</span>').join('')+'</div>';
-const rs=(o.result_images||[]).filter(Boolean);h+='<div class="label">결과 이미지</div>'+(rs.length?'<div class="imgs">'+rs.map(x=>imgBlock(x,true)).join('')+'</div>':'<div class="empty">결과 이미지 없음</div>');
-const ins=(o.input_images||[]).filter(Boolean);h+='<div class="label">입력 이미지</div>'+(ins.length?'<div class="imgs">'+ins.map(s=>imgBlock(s)).join('')+'</div>':'<div class="empty">입력 이미지 없음</div>');
+const rs=(o.result_images||[]).filter(Boolean);if(rs.length)h+='<div class="label">결과 이미지</div><div class="imgs">'+rs.map(x=>imgBlock(x,true)).join('')+'</div>';
+const ins=(o.input_images||[]).filter(Boolean);if(ins.length)h+='<div class="label">입력 이미지</div><div class="imgs">'+ins.map(s=>imgBlock(s)).join('')+'</div>';
 h+='<div class="label">프롬프트</div>'+(o.prompt?'<pre class="prompt"></pre><button class="btn copy">프롬프트 복사</button>':'<div class="empty">프롬프트 없음</div>');return h;}
 function fill(el,o){el.innerHTML=body(o);const p=el.querySelector('pre.prompt');if(p)p.textContent=o.prompt;const b=el.querySelector('.copy');if(b)b.onclick=()=>copyText(o.prompt,b);}
 loadWorks().then(ws=>{const id=new URLSearchParams(location.search).get('id');const w=ws.find(x=>String(x.id)===id)||ws[Number(id)];if(!w){document.getElementById('title').textContent='결과물을 찾을 수 없습니다';return;}
