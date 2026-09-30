@@ -1,4 +1,4 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Prompt Archive</title><link rel="stylesheet" href="common.css"></head>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Prompt Archive</title><link rel="stylesheet" href="common.css?v=3"></head>
 <body>
 <div class="page">
  <div class="bar"><span>Prompt Archive</span><span>AI Prompt &amp; Image Process</span><span>KR · 2026</span></div>
@@ -11,7 +11,7 @@
 </div>
 <div id="cats"></div>
 <footer><div class="page"><div class="bar"><span>© 2026 KR</span><span>Prompt Archive</span><a href="#">Top ↑</a></div></div></footer>
-<script src="common.js"></script><script>
+<script src="common.js?v=3"></script><script>
 loadWorks().then(ws=>{
  document.getElementById('total').textContent=ws.length+' Works';
  const order=[];const g={};ws.forEach((w,i)=>{const c=w.category||'기타';if(!g[c]){g[c]=[];order.push(c);}g[c].push([w,i]);});

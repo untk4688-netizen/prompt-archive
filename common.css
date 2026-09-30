@@ -66,8 +66,9 @@ footer{border-top:1.5px solid var(--line)}
 .fig img{width:100%}
 .fig figcaption{background:var(--bg)}.dark .fig figcaption{background:#000}
 .fig .dl{display:inline-block;font-size:12px;margin:8px 0 0;border-bottom:1px solid currentColor}
-pre.prompt{white-space:pre-wrap;word-break:break-word;font-family:inherit;font-size:14px;line-height:1.75;max-height:60vh;overflow:auto;background:var(--soft);padding:20px}
-.copy{margin-top:14px;background:var(--fg);color:#fff;border:0;border-radius:999px;padding:10px 20px;font:inherit;font-size:13px;cursor:pointer}
+pre.prompt{white-space:pre-wrap;word-break:break-word;font-family:inherit;font-size:14px;line-height:1.75;max-height:60vh;overflow:auto;overscroll-behavior:auto;-webkit-overflow-scrolling:touch;background:var(--soft);padding:20px}
+.kp{display:flex;align-items:center;gap:12px;flex-wrap:wrap;align-self:start}
+.copy{background:var(--fg);color:#fff;border:0;border-radius:999px;padding:7px 14px;font:inherit;font-size:12px;white-space:nowrap;cursor:pointer}
 .copy:hover{background:#333}
 .dark{background:#000;color:#fff}
 .dark .blk{border-color:#333}.dark .ph{border-color:#fff}.dark .fig{background:#111}
@@ -78,4 +79,7 @@ pre.prompt{white-space:pre-wrap;word-break:break-word;font-family:inherit;font-s
  .works{grid-template-columns:1fr 1fr;gap:28px 14px}
  .w .cap{grid-template-columns:1fr;gap:2px}.w .cap .m{grid-column:1}
  .nums{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}
+ pre.prompt{max-height:45vh;margin-right:28px;font-size:13px}
+ .blk{padding:22px 0}
+ .panel{margin-bottom:22vh}
 }

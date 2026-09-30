@@ -1,4 +1,4 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Prompt Archive</title><link rel="stylesheet" href="common.css"></head>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Prompt Archive</title><link rel="stylesheet" href="common.css?v=3"></head>
 <body>
 <div class="page">
  <div class="bar"><a href="index.html">← Index</a><span id="cat"></span><span id="dt"></span></div>
@@ -9,7 +9,7 @@
 </div>
 <section class="dark" id="finalsec" hidden><div class="page"><div class="bar"><span>Final</span><span></span><span id="fdt"></span></div><div class="panel" id="final" style="margin-top:24px"></div></div></section>
 <footer><div class="page"><p class="note">iPhone: 이미지를 길게 눌러 ‘사진에 저장’을 선택하세요.</p><div class="bar"><span>© 2026 KR</span><span>Prompt Archive</span><a href="index.html">Index ↑</a></div></div></footer>
-<script src="common.js"></script><script>
+<script src="common.js?v=3"></script><script>
 function stepNo(s,i){const t=String(s&&s.title||'');const k=t.indexOf(' · ');return k>-1?t.slice(0,k):pad(i+1);}
 function stepName(s){const t=String(s&&s.title||'');const k=t.indexOf(' · ');return k>-1?t.slice(k+3):t;}
 function figs(a,cls){return '<div class="gallery '+cls+'">'+a.map(p=>'<figure class="fig"><img loading="lazy" src="'+esc(src(p))+'" alt=""><figcaption><a class="dl" href="'+esc(src(p))+'" download="'+esc(fname(p))+'">이미지 저장 ↓</a></figcaption></figure>').join('')+'</div>';}
@@ -17,9 +17,9 @@ function body(o,no,name){o=o||{};const rs=(o.result_images||[]).filter(Boolean),
  let h='<div class="ph"><div class="no">'+esc(no)+'</div><div><div class="t">'+esc(name)+'</div><div class="mm">'+[o.ai,fdate(o.date)].filter(Boolean).map(esc).join(' · ')+'</div></div></div>';
  if(rs.length)h+='<div class="blk"><div class="k">Result</div>'+figs(rs,'res')+'</div>';
  if(ins.length)h+='<div class="blk"><div class="k">Input</div>'+figs(ins,'inp')+'</div>';
- if(o.prompt)h+='<div class="blk"><div class="k">Prompt</div><div><pre class="prompt"></pre><button class="copy">프롬프트 복사</button></div></div>';
+ if(o.prompt)h+='<div class="blk"><div class="k kp"><span>Prompt</span><button class="copy">프롬프트 복사</button></div><div><pre class="prompt"></pre></div></div>';
  return h;}
-function fill(el,o){el.querySelectorAll('pre.prompt').forEach(p=>p.textContent=o.prompt||'');const b=el.querySelector('.copy');if(b)b.onclick=()=>copyText(o.prompt||'',b);}
+function fill(el,o){el.querySelectorAll('pre.prompt').forEach(p=>{p.textContent=o.prompt||'';chainScroll(p);});const b=el.querySelector('.copy');if(b)b.onclick=()=>copyText(o.prompt||'',b);}
 loadWorks().then(ws=>{const q=new URLSearchParams(location.search);const id=q.get('id');const w=ws.find((x,i)=>(x.id||String(i))===id);
  if(!w){document.getElementById('title').textContent='찾을 수 없음';return;}
  const [tid,name]=splitTitle(w.title,w.id);document.title=(w.id||'')+' · '+name+' — Prompt Archive';
