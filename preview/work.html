@@ -1,0 +1,40 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Prompt Archive — Preview</title><link rel="stylesheet" href="preview.css"></head>
+<body>
+<div class="page">
+ <div class="bar"><a href="index.html">← Index</a><span id="cat"></span><span id="dt"></span></div>
+ <div class="whead"><div class="id" id="wid"></div><h1 id="title"></h1></div>
+ <div class="facts" id="facts"></div>
+ <div class="idx" id="idxwrap"><div class="lab">Index</div><div class="nums" id="nums"></div></div>
+ <div class="panel" id="panel"></div>
+</div>
+<section class="dark" id="finalsec" hidden><div class="page"><div class="bar"><span>Final</span><span></span><span id="fdt"></span></div><div class="panel" id="final" style="margin-top:24px"></div></div></section>
+<footer><div class="page"><p class="note">iPhone: 이미지를 길게 눌러 ‘사진에 저장’을 선택하세요.</p><div class="bar"><span>© 2026 KR</span><span>Prompt Archive</span><a href="index.html">Index ↑</a></div></div></footer>
+<script src="preview.js"></script><script>
+function stepNo(s,i){const t=String(s&&s.title||'');const k=t.indexOf(' · ');return k>-1?t.slice(0,k):pad(i+1);}
+function stepName(s){const t=String(s&&s.title||'');const k=t.indexOf(' · ');return k>-1?t.slice(k+3):t;}
+function figs(a,cls){return '<div class="gallery '+cls+'">'+a.map(p=>'<figure class="fig"><img loading="lazy" src="'+esc(src(p))+'" alt=""><figcaption><a class="dl" href="'+esc(src(p))+'" download="'+esc(fname(p))+'">이미지 저장 ↓</a></figcaption></figure>').join('')+'</div>';}
+function body(o,no,name){o=o||{};const rs=(o.result_images||[]).filter(Boolean),ins=(o.input_images||[]).filter(Boolean);
+ let h='<div class="ph"><div class="no">'+esc(no)+'</div><div><div class="t">'+esc(name)+'</div><div class="mm">'+[o.ai,fdate(o.date)].filter(Boolean).map(esc).join(' · ')+'</div></div></div>';
+ if(rs.length)h+='<div class="blk"><div class="k">Result</div>'+figs(rs,'res')+'</div>';
+ if(ins.length)h+='<div class="blk"><div class="k">Input</div>'+figs(ins,'inp')+'</div>';
+ if(o.prompt)h+='<div class="blk"><div class="k">Prompt</div><div><pre class="prompt"></pre><button class="copy">프롬프트 복사</button></div></div>';
+ return h;}
+function fill(el,o){el.querySelectorAll('pre.prompt').forEach(p=>p.textContent=o.prompt||'');const b=el.querySelector('.copy');if(b)b.onclick=()=>copyText(o.prompt||'',b);}
+loadWorks().then(ws=>{const q=new URLSearchParams(location.search);const id=q.get('id');const w=ws.find((x,i)=>(x.id||String(i))===id);
+ if(!w){document.getElementById('title').textContent='찾을 수 없음';return;}
+ const [tid,name]=splitTitle(w.title,w.id);document.title=(w.id||'')+' · '+name+' — Prompt Archive';
+ document.getElementById('wid').textContent=w.id||tid;document.getElementById('title').textContent=name||w.title;
+ document.getElementById('cat').textContent=(CAT_EN[w.category]||w.category||'')+' · '+(w.category||'');document.getElementById('dt').textContent=fdate(w.date);
+ const steps=(w.steps||[]).filter(Boolean);
+ const ais=[...new Set(steps.map(s=>s.ai).concat(w.final&&w.final.ai||[]).filter(a=>a&&!String(a).startsWith('실행불가')))];
+ document.getElementById('facts').innerHTML=[['Category',w.category],['Date',fdate(w.date)],['Steps',steps.length],['AI',ais.join(', ')],['Source',w.source]].filter(x=>x[1]!==undefined&&x[1]!=='').map(x=>'<div><b>'+x[0]+'</b>'+esc(x[1])+'</div>').join('');
+ const nums=document.getElementById('nums'),panel=document.getElementById('panel');
+ if(!steps.length){document.getElementById('idxwrap').hidden=true;}
+ nums.innerHTML=steps.map((s,i)=>'<button class="num" data-i="'+i+'"><span class="no">'+esc(stepNo(s,i))+'</span><span class="tt">'+esc(stepName(s))+'</span></button>').join('');
+ function show(i,scroll){nums.querySelectorAll('.num').forEach(b=>b.classList.toggle('on',+b.dataset.i===i));const s=steps[i];panel.innerHTML=body(s,stepNo(s,i),stepName(s));fill(panel,s);if(scroll)panel.scrollIntoView({behavior:'smooth',block:'start'});}
+ nums.onclick=e=>{const b=e.target.closest('.num');if(b)show(+b.dataset.i,true);};
+ if(steps.length)show(0,false);
+ const f=w.final||{};const fr=(f.result_images||[]).filter(Boolean);
+ if(fr.length||f.prompt){const sec=document.getElementById('finalsec');sec.hidden=false;document.getElementById('fdt').textContent=fdate(f.date);const el=document.getElementById('final');el.innerHTML=body(f,'Final',f.title&&f.title!=='최종'?stepName(f):'최종 결과물');fill(el,f);}
+}).catch(()=>{document.getElementById('title').textContent='불러오지 못했습니다';});
+</script></body></html>
