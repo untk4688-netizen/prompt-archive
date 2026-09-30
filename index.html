@@ -1,7 +1,24 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Prompt Archive</title><link rel="stylesheet" href="common.css"></head>
-<body><div class="wrap"><header class="top"><h1>Prompt Archive</h1><span class="muted" id="count"></span></header><div class="grid" id="list"></div></div>
+<body>
+<div class="page">
+ <div class="bar"><span>Prompt Archive</span><span>AI Prompt &amp; Image Process</span><span>KR · 2026</span></div>
+ <h1 class="hero">Prompt<br>Archive.</h1>
+ <div class="bar" style="border-top:1.5px solid #000"><span id="total"></span><span>Interior Design · Space</span><span>Index ↓</span></div>
+ <div class="split">
+  <div><h2 class="h2">What you<br>will find<br>inside?</h2><p class="lead" style="margin-top:24px">공간 설계 과정에서 AI에게 건넨 프롬프트와 입력 이미지, 그리고 그 결과물을 단계별로 기록한 아카이브입니다.</p></div>
+  <ol class="rows" id="rows"></ol>
+ </div>
+</div>
+<div id="cats"></div>
+<footer><div class="page"><div class="bar"><span>© 2026 KR</span><span>Prompt Archive</span><a href="#">Top ↑</a></div></div></footer>
 <script src="common.js"></script><script>
-loadWorks().then(ws=>{document.getElementById('count').textContent=ws.length+'개 결과물';
-document.getElementById('list').innerHTML=ws.map((w,i)=>{const t=thumbOf(w);const id=encodeURIComponent(w.id||String(i));
-return '<a class="card" href="work.html?id='+id+'"><div class="thumb">'+(t?'<img loading="lazy" src="'+esc(t)+'" alt="">':esc(w.id||''))+'</div><div class="info"><b>'+esc(w.title||w.id||'제목 없음')+'</b><span class="muted">'+esc([w.category,w.date].filter(Boolean).join(' · '))+' · 세부 '+((w.steps||[]).length)+'개</span></div></a>';}).join('')||'<p class="muted">등록된 결과물이 없습니다.</p>';}).catch(()=>{document.getElementById('list').innerHTML='<p class="muted">목록을 불러오지 못했습니다.</p>';});
+loadWorks().then(ws=>{
+ document.getElementById('total').textContent=ws.length+' Works';
+ const order=[];const g={};ws.forEach((w,i)=>{const c=w.category||'기타';if(!g[c]){g[c]=[];order.push(c);}g[c].push([w,i]);});
+ document.getElementById('rows').innerHTML=order.map((c,k)=>'<li><a href="#cat-'+k+'"><span class="n">'+(k+1)+'</span><span>'+esc(CAT_EN[c]||c)+'. <span class="c">'+esc(c)+'</span></span><span class="c">'+pad(g[c].length)+'</span></a></li>').join('');
+ document.getElementById('cats').innerHTML=order.map((c,k)=>
+  '<section id="cat-'+k+'"><div class="band"><div class="inner"><div class="bar"><span>'+pad(k+1)+' / '+pad(order.length)+'</span><span>'+esc(c)+'</span><span>'+g[c].length+' Works</span></div>'+ARROW+'<div class="big">'+esc(CAT_EN[c]||c)+'.</div><div class="cnt">'+esc(c)+'</div></div></div>'+
+  '<div class="page"><div class="works">'+g[c].map(([w,i])=>{const t=thumbOf(w);const [id,name]=splitTitle(w.title,w.id);
+   return '<a class="w" href="work.html?id='+encodeURIComponent(w.id||String(i))+'"><div class="img">'+(t?'<img loading="lazy" src="'+esc(src(t))+'" alt="">':esc(w.id||''))+'</div><div class="cap"><span class="id">'+esc(w.id||id)+'</span><span class="t">'+esc(name||w.title||'')+'</span><span class="m">'+esc(fdate(w.date))+' · '+(w.steps||[]).length+' steps</span></div></a>';}).join('')+'</div></div></section>').join('');
+}).catch(()=>{document.getElementById('cats').innerHTML='<div class="page"><p class="note">목록을 불러오지 못했습니다.</p></div>';});
 </script></body></html>
