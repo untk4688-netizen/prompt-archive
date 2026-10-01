@@ -1,0 +1,11 @@
+{
+  "name": "prompt-archive",
+  "private": true,
+  "description": "Prompt Archive — build step for GitHub Pages (webp, data split)",
+  "scripts": {
+    "build": "node scripts/build.mjs"
+  },
+  "dependencies": {
+    "sharp": "^0.34.4"
+  }
+}

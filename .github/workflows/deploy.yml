@@ -1,0 +1,52 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # webp 변환 결과 캐시 (파일 내용 해시 기준). 일부만 바뀌어도 이전 캐시를 받아 새 이미지만 변환한다.
+      - uses: actions/cache@v4
+        with:
+          path: .cache/webp
+          key: webp-v1-${{ hashFiles('works.json', 'media/**', '*.png', '*.jpg', '*.jpeg', '*.webp') }}
+          restore-keys: |
+            webp-v1-
+
+      - run: node scripts/build.mjs
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
