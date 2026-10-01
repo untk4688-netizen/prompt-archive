@@ -1,5 +1,6 @@
 const ROOT='';
 const CAT_EN={'모델링':'Modeling','이미지':'Image','다이어그램':'Diagram','재질':'Material'};
+function catLabel(s){s=String(s||'');return CAT_EN[s]?CAT_EN[s]+'.':s;}
 async function loadWorks(){const r=await fetch(ROOT+'works.json?t='+Date.now(),{cache:'no-store'});const d=await r.json();return(d&&d.works)||[];}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function src(p){p=String(p||'');return /^(https?:)?\/\//.test(p)||p.startsWith('/')?p:ROOT+p;}

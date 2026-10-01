@@ -9,7 +9,7 @@
 </div>
 <section class="dark" id="finalsec" hidden><div class="page"><div class="bar"><span>Final</span><span></span><span id="fdt"></span></div><div class="panel" id="final" style="margin-top:24px"></div></div></section>
 <footer><div class="page"><p class="note">iPhone: 이미지를 길게 눌러 ‘사진에 저장’을 선택하세요.</p><div class="bar"><span>© 2026 KR</span><span>Prompt Archive</span><a href="index.html">Index ↑</a></div></div></footer>
-<script src="common.js?v=3"></script><script>
+<script src="common.js?v=4"></script><script>
 function stepNo(s,i){const t=String(s&&s.title||'');const k=t.indexOf(' · ');return k>-1?t.slice(0,k):pad(i+1);}
 function stepName(s){const t=String(s&&s.title||'');const k=t.indexOf(' · ');return k>-1?t.slice(k+3):t;}
 function figs(a,cls){return '<div class="gallery '+cls+'">'+a.map(p=>'<figure class="fig"><img loading="lazy" src="'+esc(src(p))+'" alt=""><figcaption><a class="dl" href="'+esc(src(p))+'" download="'+esc(fname(p))+'">이미지 저장 ↓</a></figcaption></figure>').join('')+'</div>';}
@@ -23,7 +23,7 @@ function fill(el,o){el.querySelectorAll('pre.prompt').forEach(p=>{p.textContent=
 loadWorks().then(ws=>{const q=new URLSearchParams(location.search);const id=q.get('id');const w=ws.find((x,i)=>(x.id||String(i))===id);
  if(!w){document.getElementById('title').textContent='찾을 수 없음';return;}
  const [tid,name]=splitTitle(w.title,w.id);document.title=(w.id||'')+' · '+name+' — Prompt Archive';
- document.getElementById('wid').textContent=w.id||tid;document.getElementById('title').textContent=name||w.title;
+ document.getElementById('wid').textContent=w.id||tid;document.getElementById('title').textContent=catLabel(name||w.title);
  document.getElementById('cat').textContent=(CAT_EN[w.category]||w.category||'')+' · '+(w.category||'');document.getElementById('dt').textContent=fdate(w.date);
  const steps=(w.steps||[]).filter(Boolean);
  const ais=[...new Set(steps.map(s=>s.ai).concat(w.final&&w.final.ai||[]).filter(a=>a&&!String(a).startsWith('실행불가')))];

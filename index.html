@@ -11,7 +11,7 @@
 </div>
 <div id="cats"></div>
 <footer><div class="page"><div class="bar"><span>© 2026 KR</span><span>Prompt Archive</span><a href="#">Top ↑</a></div></div></footer>
-<script src="common.js?v=3"></script><script>
+<script src="common.js?v=4"></script><script>
 loadWorks().then(ws=>{
  document.getElementById('total').textContent=ws.length+' Works';
  const order=[];const g={};ws.forEach((w,i)=>{const c=w.category||'기타';if(!g[c]){g[c]=[];order.push(c);}g[c].push([w,i]);});
@@ -19,6 +19,6 @@ loadWorks().then(ws=>{
  document.getElementById('cats').innerHTML=order.map((c,k)=>
   '<section id="cat-'+k+'"><div class="band"><div class="inner"><div class="bar"><span>'+pad(k+1)+' / '+pad(order.length)+'</span><span>'+esc(c)+'</span><span>'+g[c].length+' Works</span></div>'+ARROW+'<div class="big">'+esc(CAT_EN[c]||c)+'.</div><div class="cnt">'+esc(c)+'</div></div></div>'+
   '<div class="page"><div class="works">'+g[c].map(([w,i])=>{const t=thumbOf(w);const [id,name]=splitTitle(w.title,w.id);
-   return '<a class="w" href="work.html?id='+encodeURIComponent(w.id||String(i))+'"><div class="img">'+(t?'<img loading="lazy" src="'+esc(src(t))+'" alt="">':esc(w.id||''))+'</div><div class="cap"><span class="id">'+esc(w.id||id)+'</span><span class="t">'+esc(name||w.title||'')+'</span><span class="m">'+esc(fdate(w.date))+' · '+(w.steps||[]).length+' steps</span></div></a>';}).join('')+'</div></div></section>').join('');
+   return '<a class="w" href="work.html?id='+encodeURIComponent(w.id||String(i))+'"><div class="img">'+(t?'<img loading="lazy" src="'+esc(src(t))+'" alt="">':esc(w.id||''))+'</div><div class="cap"><span class="id">'+esc(w.id||id)+'</span><span class="t">'+esc(catLabel(name||w.title||''))+'</span><span class="m">'+esc(fdate(w.date))+' · '+(w.steps||[]).length+' steps</span></div></a>';}).join('')+'</div></div></section>').join('');
 }).catch(()=>{document.getElementById('cats').innerHTML='<div class="page"><p class="note">목록을 불러오지 못했습니다.</p></div>';});
 </script></body></html>
