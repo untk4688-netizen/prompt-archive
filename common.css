@@ -1,4 +1,4 @@
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css");
 :root{--bg:#fff;--fg:#0a0a0a;--mute:#8a8a8a;--dim:#c9c9c9;--line:#0a0a0a;--soft:#f3f3f3;--pad:clamp(16px,4vw,56px)}
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
@@ -54,7 +54,7 @@ footer{border-top:1.5px solid var(--line)}
 .num.on .no{font-weight:500}
 .panel{margin:clamp(48px,7vw,96px) 0}
 .ph{display:grid;grid-template-columns:160px 1fr;gap:24px;align-items:end;border-bottom:1.5px solid var(--line);padding-bottom:14px}
-.ph .no{font-size:clamp(56px,9vw,120px);font-weight:800;letter-spacing:-.06em;line-height:.85}
+.ph .no{font-size:clamp(56px,9vw,120px);font-weight:800;letter-spacing:-.06em;line-height:.85;white-space:nowrap}
 .ph .t{font-size:clamp(20px,2.6vw,32px);font-weight:700;letter-spacing:-.03em;line-height:1.2;word-break:keep-all}
 .ph .mm{font-size:12px;color:var(--mute);margin-top:8px}
 .blk{display:grid;grid-template-columns:160px 1fr;gap:24px;padding:28px 0;border-bottom:1px solid #e2e2e2}
@@ -63,7 +63,7 @@ footer{border-top:1.5px solid var(--line)}
 .gallery.res{grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr))}
 .gallery.inp{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
 .fig{background:var(--soft)}
-.fig img{width:100%}
+.fig img{width:100%;height:auto}
 .fig figcaption{background:var(--bg)}.dark .fig figcaption{background:#000}
 .fig .dl{display:inline-block;font-size:12px;margin:8px 0 0;border-bottom:1px solid currentColor}
 pre.prompt{white-space:pre-wrap;word-break:break-word;font-family:inherit;font-size:14px;line-height:1.75;max-height:60vh;overflow:auto;overscroll-behavior:auto;-webkit-overflow-scrolling:touch;background:var(--soft);padding:20px}
@@ -73,6 +73,12 @@ pre.prompt{white-space:pre-wrap;word-break:break-word;font-family:inherit;font-s
 .dark{background:#000;color:#fff}
 .dark .blk{border-color:#333}.dark .ph{border-color:#fff}.dark .fig{background:#111}
 .note{font-size:11px;color:var(--mute);padding:28px 0}
+/* 프롬프트 전체 보기/접기 (모바일 전용, 이미지 저장 링크와 같은 모양) */
+.more{display:none;background:none;border:0;border-bottom:1px solid currentColor;border-radius:0;padding:0;margin:8px 0 0;font:inherit;font-size:12px;line-height:inherit;color:inherit;cursor:pointer}
+/* 누르는 영역만 44px 이상으로 넓힘 (보이는 글자 크기·위치는 그대로) */
+.bar a,.fig .dl,.more{position:relative}
+.bar a::after{content:"";position:absolute;left:0;right:0;top:50%;height:44px;transform:translateY(-50%)}
+.fig .dl::after,.more::after{content:"";position:absolute;left:0;right:0;top:-10px;bottom:-16px}
 @media (max-width:720px){
  .split,.idx,.ph,.blk{grid-template-columns:1fr;gap:12px}
  .bar{grid-template-columns:1fr 1fr}.bar>*:nth-child(2){display:none}
@@ -80,6 +86,8 @@ pre.prompt{white-space:pre-wrap;word-break:break-word;font-family:inherit;font-s
  .w .cap{grid-template-columns:1fr;gap:2px}.w .cap .m{grid-column:1}
  .nums{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}
  pre.prompt{max-height:45vh;margin-right:28px;font-size:13px}
+ pre.prompt.open{max-height:none;overflow:visible}
+ .more:not([hidden]){display:inline-block}
  .blk{padding:22px 0}
  .panel{margin-bottom:22vh}
 }

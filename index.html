@@ -1,9 +1,12 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Prompt Archive</title><link rel="stylesheet" href="common.css?v=3"></head>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Prompt Archive</title><meta name="build" content="">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Prompt Archive"><meta property="og:title" content="Prompt Archive"><meta property="og:description" content="공간 설계 과정에서 AI에게 건넨 프롬프트와 입력 이미지, 그리고 그 결과물을 단계별로 기록한 아카이브입니다."><meta property="og:url" content="https://untk4688-netizen.github.io/prompt-archive/"><meta property="og:image" content="https://untk4688-netizen.github.io/prompt-archive/_img/media/M10_S14_result_01.jpg.w1600.webp"><meta property="og:image:type" content="image/webp"><meta property="og:image:width" content="1600"><meta property="og:image:height" content="1120">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Prompt Archive"><meta name="twitter:description" content="공간 설계 과정에서 AI에게 건넨 프롬프트와 입력 이미지, 그리고 그 결과물을 단계별로 기록한 아카이브입니다."><meta name="twitter:image" content="https://untk4688-netizen.github.io/prompt-archive/_img/media/M10_S14_result_01.jpg.w1600.webp">
+<link rel="stylesheet" href="common.css?v=4"></head>
 <body>
 <div class="page">
  <div class="bar"><span>Prompt Archive</span><span>AI Prompt &amp; Image Process</span><span>KR · 2026</span></div>
  <h1 class="hero">Prompt<br>Archive.</h1>
- <div class="bar" style="border-top:1.5px solid #000"><span id="total"></span><span>Interior Design · Space</span><span>Index ↓</span></div>
+ <div class="bar" style="border-top:1.5px solid #000"><span id="total"></span><span>Interior Design · Space</span><a href="#rows">Index ↓</a></div>
  <div class="split">
   <div><h2 class="h2">What you<br>will find<br>inside?</h2><p class="lead" style="margin-top:24px">공간 설계 과정에서 AI에게 건넨 프롬프트와 입력 이미지, 그리고 그 결과물을 단계별로 기록한 아카이브입니다.</p></div>
   <ol class="rows" id="rows"></ol>
@@ -11,14 +14,14 @@
 </div>
 <div id="cats"></div>
 <footer><div class="page"><div class="bar"><span>© 2026 KR</span><span>Prompt Archive</span><a href="#">Top ↑</a></div></div></footer>
-<script src="common.js?v=4"></script><script>
-loadWorks().then(ws=>{
+<script src="common.js?v=5"></script><script>
+loadIndex().then(ws=>{
  document.getElementById('total').textContent=ws.length+' Works';
  const order=[];const g={};ws.forEach((w,i)=>{const c=w.category||'기타';if(!g[c]){g[c]=[];order.push(c);}g[c].push([w,i]);});
  document.getElementById('rows').innerHTML=order.map((c,k)=>'<li><a href="#cat-'+k+'"><span class="n">'+(k+1)+'</span><span>'+esc(CAT_EN[c]||c)+'. <span class="c">'+esc(c)+'</span></span><span class="c">'+pad(g[c].length)+'</span></a></li>').join('');
  document.getElementById('cats').innerHTML=order.map((c,k)=>
   '<section id="cat-'+k+'"><div class="band"><div class="inner"><div class="bar"><span>'+pad(k+1)+' / '+pad(order.length)+'</span><span>'+esc(c)+'</span><span>'+g[c].length+' Works</span></div>'+ARROW+'<div class="big">'+esc(CAT_EN[c]||c)+'.</div><div class="cnt">'+esc(c)+'</div></div></div>'+
-  '<div class="page"><div class="works">'+g[c].map(([w,i])=>{const t=thumbOf(w);const [id,name]=splitTitle(w.title,w.id);
-   return '<a class="w" href="work.html?id='+encodeURIComponent(w.id||String(i))+'"><div class="img">'+(t?'<img loading="lazy" src="'+esc(src(t))+'" alt="">':esc(w.id||''))+'</div><div class="cap"><span class="id">'+esc(w.id||id)+'</span><span class="t">'+esc(catLabel(name||w.title||''))+'</span><span class="m">'+esc(fdate(w.date))+' · '+(w.steps||[]).length+' steps</span></div></a>';}).join('')+'</div></div></section>').join('');
+  '<div class="page"><div class="works">'+g[c].map(([w,i])=>{const t=w.thumb;const [id,name]=splitTitle(w.title,w.id);
+   return '<a class="w" href="work.html?id='+encodeURIComponent(w.key||String(i))+'"><div class="img">'+(t?img(t,600,[w.tw,w.th]):esc(w.id||''))+'</div><div class="cap"><span class="id">'+esc(w.id||id)+'</span><span class="t">'+esc(catLabel(name||w.title||''))+'</span><span class="m">'+esc(fdate(w.date))+' · '+w.steps+' steps</span></div></a>';}).join('')+'</div></div></section>').join('');
 }).catch(()=>{document.getElementById('cats').innerHTML='<div class="page"><p class="note">목록을 불러오지 못했습니다.</p></div>';});
 </script></body></html>
