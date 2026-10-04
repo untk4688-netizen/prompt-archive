@@ -1,7 +1,7 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Prompt Archive</title><meta name="build" content="">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Prompt Archive"><meta property="og:title" content="Prompt Archive"><meta property="og:description" content="공간 설계 과정에서 AI에게 건넨 프롬프트와 입력 이미지, 그리고 그 결과물을 단계별로 기록한 아카이브입니다."><meta property="og:url" content="https://untk4688-netizen.github.io/prompt-archive/"><meta property="og:image" content="https://untk4688-netizen.github.io/prompt-archive/_img/media/M10_S14_result_01.jpg.w1600.webp"><meta property="og:image:type" content="image/webp"><meta property="og:image:width" content="1600"><meta property="og:image:height" content="1120">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Prompt Archive"><meta name="twitter:description" content="공간 설계 과정에서 AI에게 건넨 프롬프트와 입력 이미지, 그리고 그 결과물을 단계별로 기록한 아카이브입니다."><meta name="twitter:image" content="https://untk4688-netizen.github.io/prompt-archive/_img/media/M10_S14_result_01.jpg.w1600.webp">
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css"><link rel="stylesheet" href="common.css?v=5"></head>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css"><link rel="stylesheet" href="common.css?v=6"></head>
 <body>
 <div class="page">
  <div class="bar"><a href="index.html">← Index</a><span id="cat"></span><span id="dt"></span></div>
@@ -24,11 +24,11 @@ function body(o,no,name){o=o||{};const rs=(o.result_images||[]).filter(Boolean),
  if(o.prompt)h+='<div class="blk"><div class="k kp"><span>Prompt</span><button class="copy">프롬프트 복사</button></div><div><pre class="prompt"></pre><button class="more" hidden>전체 보기</button></div></div>';
  return h;}
 function fill(el,o){el.querySelectorAll('pre.prompt').forEach(p=>{p.textContent=o.prompt||'';chainScroll(p);const m=p.nextElementSibling;if(m&&m.classList.contains('more'))promptToggle(p,m);});const b=el.querySelector('.copy');if(b)b.onclick=()=>copyText(o.prompt||'',b);}
-// 3글자 이상 단계 번호만 160px 칸에 맞게 글자 크기 축소 (두 글자 번호는 그대로)
+// 3글자 이상 번호(15-B, Final 등)가 160px 칸을 넘칠 때만 글자 크기 축소 (두 글자 번호는 그대로)
 function fitNo(el){const n=el.querySelector('.ph .no');if(!n)return;n.style.fontSize='';if(n.textContent.length<3)return;
  const cw=n.clientWidth,sw=n.scrollWidth;if(sw>cw)n.style.fontSize=Math.floor(parseFloat(getComputedStyle(n).fontSize)*cw/sw)+'px';}
 loadWork(new URLSearchParams(location.search).get('id')).then(({work:w,dims})=>{DIMS=dims||{};
- if(!w){document.getElementById('title').textContent='찾을 수 없음';return;}
+ if(!w){notFound('찾을 수 없음');return;}
  const [tid,name]=splitTitle(w.title,w.id);document.title=(w.id||'')+' · '+name+' — Prompt Archive';
  document.getElementById('wid').textContent=w.id||tid;document.getElementById('title').textContent=catLabel(name||w.title);
  document.getElementById('cat').textContent=(CAT_EN[w.category]||w.category||'')+' · '+(w.category||'');document.getElementById('dt').textContent=fdate(w.date);
@@ -54,6 +54,9 @@ loadWork(new URLSearchParams(location.search).get('id')).then(({work:w,dims})=>{
   const fit=()=>{fitNo(panel);if(k>-1)panel.scrollIntoView({behavior:'instant',block:'start'});};
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);else fit();}
  const f=w.final||{};const fr=(f.result_images||[]).filter(Boolean);
- if(fr.length||f.prompt){const sec=document.getElementById('finalsec');sec.hidden=false;document.getElementById('fdt').textContent=fdate(f.date);const el=document.getElementById('final');el.innerHTML=body(f,'Final',f.title&&f.title!=='최종'?stepName(f):'최종 결과물');fill(el,f);}
-}).catch(()=>{document.getElementById('title').textContent='불러오지 못했습니다';});
+ if(fr.length||f.prompt){const sec=document.getElementById('finalsec');sec.hidden=false;document.getElementById('fdt').textContent=fdate(f.date);const el=document.getElementById('final');el.innerHTML=body(f,'Final',f.title&&f.title!=='최종'?stepName(f):'최종 결과물');fill(el,f);
+  fitNo(el);addEventListener('resize',()=>fitNo(el));if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>fitNo(el));}
+}).catch(()=>notFound('불러오지 못했습니다'));
+// 결과물을 찾지 못하면 빈 정보 줄·Index는 숨긴다
+function notFound(t){document.getElementById('title').textContent=t;['facts','idxwrap'].forEach(i=>document.getElementById(i).hidden=true);}
 </script></body></html>
